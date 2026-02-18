@@ -100,16 +100,16 @@ if (form) {
 ============================ */
 
 function updateTable(gps) {
+
     let row = document.querySelector(`tr[data-id="${gps.id}"]`);
 
     if (!row) {
-        row = document.createElement("tr");
-        row.className =
-            "border-b border-stone-800 hover:bg-stone-800/60 transition";
+        row = document.createElement('tr');
+        row.className = "border-b border-stone-800 hover:bg-stone-800/60 transition";
         tableBody.prepend(row);
     }
 
-    // 🔥 ACTUALIZAR DATASETS (MUY IMPORTANTE)
+    // 🔥 ACTUALIZAR DATASET
     row.dataset.id = gps.id;
     row.dataset.transporte = gps.transporte_id;
     row.dataset.tipo = gps.tipo_vehiculo;
@@ -118,9 +118,8 @@ function updateTable(gps) {
     row.dataset.destino = gps.destino;
     row.dataset.usuario = gps.usuario;
     row.dataset.contrasena = gps.contrasena;
-    row.dataset.estado = gps.estado;
+    row.dataset.estado = gps.estado ? '1' : '0';
 
-    // 🔥 ACTUALIZAR CONTENIDO VISUAL
     row.innerHTML = `
         <td class="py-4 px-6">${gps.placa}</td>
         <td class="py-4 px-6">${gps.transporte.nombre}</td>
@@ -131,13 +130,21 @@ function updateTable(gps) {
         </td>
         <td class="py-4 px-6">${gps.usuario}</td>
         <td class="py-4 px-6">${gps.contrasena}</td>
+
+        <!-- 🔥 SWITCH MODERNO -->
         <td class="py-4 px-6">
-    ${
-        gps.estado
-            ? '<span class="px-3 py-1 text-xs rounded-full bg-green-500/20 text-green-400">Activo</span>'
-            : '<span class="px-3 py-1 text-xs rounded-full bg-red-500/20 text-red-400">Inactivo</span>'
-    }
-</td>
+            <button 
+                class="toggleEstado relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-300 
+                ${gps.estado ? 'bg-green-500' : 'bg-stone-600'}"
+                data-id="${gps.id}"
+                data-estado="${gps.estado ? 1 : 0}"
+            >
+                <span 
+                    class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-300
+                    ${gps.estado ? 'translate-x-6' : 'translate-x-1'}">
+                </span>
+            </button>
+        </td>
 
         <td class="py-4 px-6 text-right">
             <button type="button"
@@ -147,7 +154,6 @@ function updateTable(gps) {
         </td>
     `;
 }
-
 /* ============================
    VALIDACIONES VISUALES
 ============================ */
