@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <title>GPS Plataforma</title>
     @vite(['resources/js/app.js'])
 </head>
 
-<body
-    class="relative min-h-screen
-           bg-gradient-to-br from-green-800 via-emerald-700 to-green-600">
+<body class="min-h-screen bg-gradient-to-br from-stone-950 via-stone-900 to-stone-800">
+
+
 
     <!-- GRID TEXTURE -->
     <div

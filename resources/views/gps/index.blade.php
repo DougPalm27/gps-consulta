@@ -1,4 +1,4 @@
-@extends('layouts.app', ['hideNav' => true])
+@extends('layouts.app')
 
 @section('content')
 
@@ -13,6 +13,15 @@
             </span>
             Gestión de GPS
         </h1>
+        <div class="flex gap-6 mb-8">
+
+            <select id="filtroEstado"
+                class="mb-4 bg-stone-800 text-stone-100 rounded-xl px-4 py-2">
+                <option value="todos">Todos</option>
+                <option value="activo">Activos</option>
+                <option value="inactivo">Inactivos</option>
+            </select>
+        </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
 
@@ -20,7 +29,6 @@
                  LISTADO
             ========================= -->
             <div class="lg:col-span-3">
-
                 <!-- BUSCADOR -->
                 <input
                     id="searchInput"
@@ -42,7 +50,9 @@
                                 <th class="py-4 text-left px-6">Enlace</th>
                                 <th class="py-4 text-left px-6">Usuario</th>
                                 <th class="py-4 text-left px-6">Contraseña</th>
+                                <th class="py-4 text-left px-6">Estado</th>
                                 <th class="py-4 text-right px-6">Acción</th>
+
                             </tr>
                         </thead>
 
@@ -57,18 +67,32 @@
                                 data-plataforma="{{ $item->plataforma }}"
                                 data-usuario="{{ $item->usuario }}"
                                 data-contrasena="{{ $item->contrasena }}"
-                                data-destino="{{ $item->destino }}"
-                            >
+                                data-destino="{{ $item->destino }}">
                                 <td class="py-4 px-6">{{ $item->placa }}</td>
                                 <td class="py-4 px-6">{{ $item->transporte->nombre }}</td>
                                 <td class="py-4 px-6">
                                     <a href="{{ $item->plataforma }}" target="_blank"
-                                       class="text-amber-400 hover:underline">
+                                        class="text-amber-400 hover:underline">
                                         Ir
                                     </a>
                                 </td>
                                 <td class="py-4 px-6">{{ $item->usuario }}</td>
                                 <td class="py-4 px-6">{{ $item->contrasena }}</td>
+                                <td class="py-4 px-6">
+                                    <button
+                                        class="toggleEstado relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-300 
+                    {{ $item->estado ? 'bg-green-500' : 'bg-stone-600' }}"
+                                        data-id="{{ $item->id }}"
+                                        data-estado="{{ $item->estado ? 1 : 0 }}">
+                                        <span
+                                            class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-300
+            {{ $item->estado ? 'translate-x-6' : 'translate-x-1' }}">
+                                        </span>
+                                    </button>
+                                </td>
+
+
+
                                 <td class="py-4 px-6 text-right">
                                     <button type="button"
                                         class="editar text-stone-400 hover:text-amber-400 transition text-lg">
@@ -117,9 +141,9 @@
                             class="w-full rounded-xl px-4 py-3 bg-stone-800 text-stone-100 focus:ring-2 focus:ring-amber-500">
                             <option value="">Selecciona transporte</option>
                             @foreach ($transportes as $transporte)
-                                <option value="{{ $transporte->id }}">
-                                    {{ $transporte->nombre }}
-                                </option>
+                            <option value="{{ $transporte->id }}">
+                                {{ $transporte->nombre }}
+                            </option>
                             @endforeach
                         </select>
 

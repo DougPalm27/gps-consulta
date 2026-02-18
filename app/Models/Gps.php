@@ -16,7 +16,9 @@ class Gps extends Model
         'destino',
         'usuario',
         'contrasena',
+        'estado'
     ];
+
 
     public function transporte()
     {

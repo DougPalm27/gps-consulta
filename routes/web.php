@@ -20,3 +20,5 @@ Route::get('/dashboard', function () {
 // GPS (MVC correcto)
 Route::get('/gps', [GpsController::class, 'index']);
 Route::post('/gps', [GpsController::class, 'store']);
+Route::patch('/gps/{gps}/estado', [GpsController::class, 'toggleEstado']);
+

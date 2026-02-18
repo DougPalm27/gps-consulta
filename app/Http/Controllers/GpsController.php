@@ -12,9 +12,12 @@ class GpsController extends Controller
     public function index()
     {
         $transportes = Transporte::orderBy('nombre')->get();
-        $gps = Gps::with('transporte')->get();
+        $gps = Gps::with('transporte')->latest()->get();
 
-        return view('gps.index', compact('transportes', 'gps'));
+        $activos = Gps::where('estado', 1)->count();
+        $inactivos = Gps::where('estado', 0)->count();
+
+        return view('gps.index', compact('transportes', 'gps', 'activos', 'inactivos'));
     }
 
     // CREAR / ACTUALIZAR
@@ -28,6 +31,7 @@ class GpsController extends Controller
             'destino' => 'required|string|max:150',
             'usuario' => 'required|string|max:100',
             'contrasena' => 'required|string|max:150',
+
         ]);
 
         if ($request->gps_id) {
@@ -35,7 +39,7 @@ class GpsController extends Controller
             $gps = Gps::findOrFail($request->gps_id);
             $gps->update($validated);
         } else {
-
+            $validated['estado'] = 1;
             $gps = Gps::create($validated);
         }
 
@@ -44,5 +48,16 @@ class GpsController extends Controller
             'gps' => $gps->load('transporte')
         ]);
     }
-}
 
+    public function toggleEstado(Gps $gps)
+    {
+        $gps->estado = !$gps->estado;
+        $gps->save();
+
+        return response()->json([
+            'success' => true,
+            'estado' => $gps->estado,
+            'id' => $gps->id
+        ]);
+    }
+}
